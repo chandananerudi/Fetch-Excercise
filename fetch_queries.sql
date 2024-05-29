@@ -6,7 +6,7 @@ WHERE r.purchaseDate >= DATE_SUB(DATE_FORMAT(CURRENT_DATE, '%Y-%m-01'), INTERVAL
 GROUP BY b.name 
 ORDER BY receipt_count DESC LIMIT 5;
 
-/*How does the ranking of the top 5 brands by receipts scanned for the recent month compare to the ranking for the previous month?*/
+/*2.How does the ranking of the top 5 brands by receipts scanned for the recent month compare to the ranking for the previous month?*/
 
 WITH recent_month AS (
     SELECT b.name AS brandName, COUNT(r.receipt_id) AS receipt_count FROM Brands b
@@ -31,14 +31,14 @@ WHERE rm.brandName IS NULL
 ORDER BY recentCount DESC, previousCount DESC;
 
 
-/*When considering average spend from receipts with 'rewardsReceiptStatus’ of ‘Accepted’ or ‘Rejected’, which is greater?*/
+/*3.When considering average spend from receipts with 'rewardsReceiptStatus’ of ‘Accepted’ or ‘Rejected’, which is greater?*/
 
 SELECT rewardsReceiptStatus, AVG(totalSpent) AS average_spend FROM Receipts
 WHERE rewardsReceiptStatus IN ('Accepted', 'Rejected')
 GROUP BY rewardsReceiptStatus;
 
 
-/*When considering total number of items purchased from receipts with 'rewardsReceiptStatus’ of ‘Accepted’ or ‘Rejected’, which is greater?*/
+/*4.When considering total number of items purchased from receipts with 'rewardsReceiptStatus’ of ‘Accepted’ or ‘Rejected’, which is greater?*/
 
 SELECT rewardsReceiptStatus, SUM(purchasedItemCount) AS total_items FROM Receipts
 WHERE rewardsReceiptStatus IN ('Accepted', 'Rejected')
@@ -46,7 +46,7 @@ GROUP BY rewardsReceiptStatus;
 
 
 
-/*Which brand has the most spend among users who were created within the past 6 months?*/
+/*5.Which brand has the most spend among users who were created within the past 6 months?*/
 
 SELECT b.name AS brandName, SUM(r.totalSpent) AS totalSpent FROM Users u
 JOIN Receipts r 
@@ -57,7 +57,7 @@ WHERE u.createdDate >= DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH)
 GROUP BY b.name
 ORDER BY totalSpent DESC LIMIT 1;
 
-/*Which brand has the most transactions among users who were created within the past 6 months?*/
+/*6.Which brand has the most transactions among users who were created within the past 6 months?*/
 
 SELECT b.name AS brandName, COUNT(r.receipt_id) AS transactionCount FROM Users u
 JOIN Receipts r 
